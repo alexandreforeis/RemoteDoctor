@@ -19,7 +19,7 @@ public class RegisterActivity extends AppCompatActivity {
         final EditText etPassword = (EditText) findViewById(R.id.etPassword);
         final EditText etPeso = (EditText) findViewById(R.id.etPeso);
         final EditText etPhone = (EditText) findViewById(R.id.etPhone);
-        final EditText etUsername = (EditText) findViewById(R.id.etUsername);
+        final EditText etUsername = (EditText) findViewById(R.id.etEmail);
         final Button bRegister = (Button) findViewById(R.id.bRegister);
     }
 }
