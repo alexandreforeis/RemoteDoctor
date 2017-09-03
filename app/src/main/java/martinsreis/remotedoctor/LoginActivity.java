@@ -1,12 +1,15 @@
 package martinsreis.remotedoctor;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -14,6 +17,13 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -33,41 +43,43 @@ public class LoginActivity extends AppCompatActivity {
                 final String email = etEmail.getText().toString();
                 final String password = etPassword.getText().toString();
 
-                Response.Listener<String> responseListener = new Response.Listener<String>() {
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl("http://52.15.202.161/")
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+
+                APIService service = retrofit.create(APIService.class);
+
+                Call<PacienteModel> response =  service.login(new LoginRequest(email,password));
+                response.enqueue(new Callback<PacienteModel>() {
                     @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject jsonResponse = new JSONObject(response);
-                            boolean success = jsonResponse.getBoolean("success");
-
-                            if (success){
-                                String nome = jsonResponse.getString("nome");
-
-                                Intent intent = new Intent(LoginActivity.this, UserAreaActivity.class);
-                                intent.putExtra("nome", nome);
-
-                                LoginActivity.this.startActivity(intent);
-
-                            }else {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                                builder.setMessage("Falha no Login")
-                                        .setNegativeButton("Tente novamente",null)
-                                        .create()
-                                        .show();
-                            }
-
-
-                        }catch (JSONException e){
-                            e.printStackTrace();
+                    public void onResponse(Call<PacienteModel> call, retrofit2.Response<PacienteModel> response) {
+                        if(!response.body().getStatus()){
+                            Toast.makeText(getApplicationContext(), (String)response.body().getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                            return ;
                         }
 
+                        //salvar token usando shared preferences
+                        SharedPreferences sharedPref = LoginActivity.this.getPreferences(getApplicationContext().MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        editor.putString(getString(R.string.token), response.body().getToken());
+                        editor.commit();
+
+                        //String token = sharedPref.getString(getString(R.string.token), "");
+
+
+                        //linkar tela quando logar
+                        Intent loginIntent = new Intent(LoginActivity.this, UserAreaActivity.class);
+                        LoginActivity.this.startActivity(loginIntent);
+
                     }
-                };
 
-                LoginRequest loginRequest = new LoginRequest(email,password, responseListener);
-                RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
-                queue.add(loginRequest);
-
+                    @Override
+                    public void onFailure(Call<PacienteModel> call, Throwable t) {
+                        Log.w("tcc-api", "ERRO");
+                    }
+                });
             }
         });
     }

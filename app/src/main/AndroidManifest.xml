@@ -11,6 +11,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.samsung.android.health.permission.read"
+            android:value="com.samsung.health.step_count;com.samsung.health.blood_pressure;com.samsung.health.weight;com.samsung.health.oxygen_saturation;com.samsung.health.heart_rate"/>
+
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,7 +23,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".UserAreaActivity" />
-        <activity android:name=".RegisterActivity"></activity>
     </application>
 
 </manifest>

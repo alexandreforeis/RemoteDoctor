@@ -8,18 +8,6 @@
     tools:layout_editor_absoluteY="81dp"
     tools:layout_editor_absoluteX="0dp">
 
-    <TextView
-        android:id="@+id/tvWelcomeMsg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Olá, Fulano. Tudo bem?"
-        tools:layout_constraintTop_creator="1"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <Button
         android:id="@+id/bSendData"
         android:layout_width="0dp"
@@ -39,12 +27,15 @@
         android:id="@+id/tvMsgUserArea"
         android:layout_width="320dp"
         android:layout_height="0dp"
+        android:layout_marginTop="158dp"
         android:text='Não se esqueça de fazer todas as medições antes de clicar em "enviar dados".'
-        tools:layout_constraintTop_creator="1"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="55dp"
-        tools:layout_constraintLeft_creator="1"
+        android:textAlignment="center"
+        android:textColor="#000"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_constraintTop_creator="1" />
 
 </android.support.constraint.ConstraintLayout>
